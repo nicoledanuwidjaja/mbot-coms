@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <SerialStream.h>
 using namespace LibSerial;

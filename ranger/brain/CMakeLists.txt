@@ -25,9 +25,10 @@ include_directories(${GAZEBO_INCLUDE_DIRS})
 link_directories(${GAZEBO_LIBRARY_DIRS})
 
 # libserial
-pkg_check_modules(LIBSERIAL REQUIRED libserial)
-include_directories(${LIBSERIAL_INCLUDE_DIRS})
-link_directories("${LIBSERIAL_LIBRARY_DIRS}")
+PKG_CHECK_MODULES(LIBSERIAL REQUIRED libserial)
+include_directories(/usr/include/libserial)
+# include_directories(${LIBSERIAL_INCLUDE_DIRS})
+# link_directories("${LIBSERIAL_LIBRARY_DIRS}")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GAZEBO_CXX_FLAGS}")
 add_executable(brain brain.cc gz_robot.cc rg_robot.cc)
