@@ -21,7 +21,7 @@ void loop()
 
   if (temp.equals("Go")) {
     // Line state is 3 when both sensors are over a line
-    // 2 if sensor 2 is over one, 1 if sesnor 1 is over one
+    // 2 if sensor 2 is over one, 1 if sensor 1 is over one
     int lineState = lineFinder.readSensors();
     if (lineState == 3) {
       Serial.println("Sensor 1 and 2 on line");

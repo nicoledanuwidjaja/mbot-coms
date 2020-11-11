@@ -1,0 +1,1 @@
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=remove    -rdynamic CMakeFiles/cmTC_85bf1.dir/CheckFunctionExists.c.o  -o cmTC_85bf1 
