@@ -1,4 +1,6 @@
+# Gazebo Models
+Model and modules for simulated mBot Ranger Land Raider in Gazebo. SDF model objects are a collection of meshes, visuals, objects, links, and plugins that generate a robot model.
 
-Model and modules for simulated Mbot Ranger
+Source: http://gazebosim.org/tutorials?tut=build_model
 
-From Sarfaraz Quadri and Xingyu Lu
+Attributes: Sarfaraz Quadri and Xingyu Lu
