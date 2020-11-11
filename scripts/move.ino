@@ -4,7 +4,7 @@
 #include <Servo.h>
 #include <SoftwareSerial.h>
 
-#include <MeMCore.h>
+#include <MeAuriga.h>
 
 double angle_rad = PI/180.0;
 double angle_deg = 180.0/PI;
@@ -13,9 +13,11 @@ MeDCMotor motor_9(9);
 MeDCMotor motor_10(10);
 double currentTime = 0;
 double lastTime = 0;
+
 double getLastTime() {
     	return currentTime = millis()/1000.0 - lastTime;
 }
+
 MeBuzzer buzzer;
 void turnAround();
 void mainProgram();
