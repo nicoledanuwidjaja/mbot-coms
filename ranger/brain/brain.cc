@@ -6,42 +6,89 @@
 using namespace LibSerial;
 using namespace std;
 
-static SerialStream port;
+const String PORT = "/dev/ttyUSB0";
 
-void
-setup()
+int main(int argc, char *argv[])
 {
-	port.Open("/dev/ttyUSB0");
-	port.SetBaudRate(LibSerial::BaudRate::BAUD_9600);
-	port.SetCharacterSize(LibSerial::CharacterSize::CHAR_SIZE_8);
-	port.SetParity(LibSerial::Parity::PARITY_NONE);
-	//port.SetStopBits(LibSerial::StopBits::ONE);
-}
+	create_robot_connection(PORT);
 
-void
-read()
-{
-	char temp[100];
-	int ii = 0;
-
-	for (; ii < 96; ++ii) {
-		port.read(temp + ii, 1);
-		if (temp[ii] == '\n') {
-			break;
-		}
-	}
-
-	temp[ii+1] = 0;
-	cout << temp << endl;
-}
-
-int
-main(int argc, char* argv[])
-{
-	setup();
-	while (true) {
+	while (true)
 		port.write("Go", 2);
-		read();
+		sleep(2);
+		set_all_lights(0, 0, 255);
+		sleep(2);
+		lights_off();
+		sleep(2);
+		set_single_light(1, 0, 255, 0);
+		sleep(2);
+		single_light_off(1);
+		sleep(2);
+		move_forward();
+		sleep(2);
+		stop();
+		sleep(2);
+		move_backward();
+		sleep(2);
+		stop();
+		sleep(2);
+		turn_left();
+		sleep(2);
+		stop();
+		sleep(2);
+		turn_right();
+		sleep(2);
+		stop();
+		sleep(2);
+		move_forward(250);
+		sleep(2);
+		stop();
+		sleep(2);
+		move_backward(250);
+		sleep(2);
+		stop();
+		sleep(2);
+		turn_left(250);
+		sleep(2);
+		stop();
+		sleep(2);
+		turn_right(250);
+		sleep(2);
+		stop();
+		sleep(2);
+		tank_drive(200, -200);
+		sleep(2);
+		stop();
+		sleep(2);
+		tank_drive(-200, 200);
+		sleep(2);
+		stop();
+		sleep(2);
+		tank_drive(200, 200);
+		sleep(2);
+		stop();
+		sleep(2);
+		tank_drive(-200, -170);
+		sleep(2);
+		stop();
+		sleep(2);
+		make_noise(1000, 100);
+		sleep(2);
+		cout << "line sensor: " << read_line_sensor() << endl;
+		sleep(2);
+		cout << "light sensor: " << read_light_sensor() << endl;
+		sleep(2);
+		cout << "temperature: " << read_temperature_sensor() << endl;
+		sleep(2);
+		cout << "sound sensor: " << read_sound_sensor() << endl;
+		sleep(2);
+		cout << "sonar sensor: " << read_sonar_sensor() << endl;
+		sleep(2);
+		cout << "Gyro X: " << read_gyroscope_x() << endl;
+		sleep(2);
+		cout << "Gyro Y: " << read_gyroscope_y() << endl;
+		sleep(2);
+		cout << "Gyro Z: " << read_gyroscope_z() << endl;
+		sleep(2);
 		std::this_thread::sleep_for(std::chrono::milliseconds(200));
 	}
 }
