@@ -2,7 +2,7 @@
  * CC-BY-SA 3.0 by Maker Works Tech Co., Ltd, www.makeblock.cc
  * Modified from mbot factory firmware
  */
-#include "SubSystems.h"
+#include "subsystems.h"
 
 #define GET 1
 #define RUN 2

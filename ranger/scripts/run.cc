@@ -4,8 +4,8 @@
 */
 
 #include <MeAuriga.h>
-#include "SubSystems.h"
-#include "Commands.h"
+#include "subsystems.h"
+#include "commands.h"
 #include "SerialController.h"
 
 boolean is_master = false;
