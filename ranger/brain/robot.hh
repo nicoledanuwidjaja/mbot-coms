@@ -22,6 +22,7 @@ class GzRobot : public Robot {
     float pos_y;
     float range;
     float pos_t;
+    int noise;
 
     GzRobot(int argc, char* argv[], void (*cb)(Robot*));
     ~GzRobot();
@@ -29,6 +30,7 @@ class GzRobot : public Robot {
     bool at_goal();
     void done();
     void on_scan(ConstSonarStampedPtr &msg);
+    void on_sound(ConstIntPtr &msg);
     void on_pose(ConstPoseStampedPtr &msg);
 
     float get_range();
@@ -42,6 +44,7 @@ class GzRobot : public Robot {
     gazebo::transport::NodePtr node;
     gazebo::transport::PublisherPtr vel_pub;
     gazebo::transport::SubscriberPtr scan_sub;
+    gazebo::transport::SubscriberPtr mic_sub;
     gazebo::transport::SubscriberPtr pose_sub;
 };
 

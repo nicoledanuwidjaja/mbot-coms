@@ -32,6 +32,13 @@ GzRobot::GzRobot(int argc, char* argv[], void (*cb)(Robot*))
         false
     );
 
+    mic_sub = node->Subscribe(
+        string("~/tankbot0/mic"),
+        &Robot::on_sound,
+        this,
+        false
+    );
+
     pose_sub = node->Subscribe(
         string("~/tankbot0/pose"),
         &GzRobot::on_pose,
