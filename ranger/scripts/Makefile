@@ -1,20 +1,15 @@
 
-PORT := /dev/ttyUSB0
-FQBN := arduino:avr:mega:cpu=atmega2560
+BIN := brain
 
-all:
-	arduino-cli compile --fqbn $(FQBN)
-	arduino-cli upload --port $(PORT) --fqbn $(FQBN)
+all: commands SerialController Subsystems run
 
-setup:
-	arduino-cli core update-index
-	arduino-cli core install arduino:avr
+build/Makefile: Makefile CMakeLists.txt
+	mkdir -p build
+	(cd build && cmake ..)
 
-screen:
-	stty -F /dev/ttyUSB0 9600
-	screen /dev/ttyUSB0
+$(BIN): $(wildcard *.cc) build/Makefile
+	(cd build && make)
+	cp build/$(BIN) .
 
 clean:
-	rm -rf build
-
-.PHONY: all setup screen clean
+	rm -rf build $(BIN) commands SerialController Subsystems run
