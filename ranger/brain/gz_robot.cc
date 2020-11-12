@@ -34,7 +34,7 @@ GzRobot::GzRobot(int argc, char* argv[], void (*cb)(Robot*))
 
     mic_sub = node->Subscribe(
         string("~/tankbot0/mic"),
-        &Robot::on_sound,
+        &GzRobot::on_sound,
         this,
         false
     );
@@ -119,7 +119,7 @@ GzRobot::on_scan(ConstSonarStampedPtr &msg)
 }
 
 void
-Robot::on_sound(ConstIntPtr &msg)
+GzRobot::on_sound(ConstIntPtr &msg)
 {
 
     this->noise = msg->data();

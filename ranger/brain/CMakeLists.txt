@@ -26,12 +26,11 @@ link_directories(${GAZEBO_LIBRARY_DIRS})
 
 # libserial
 PKG_CHECK_MODULES(LIBSERIAL REQUIRED libserial)
-include_directories(/usr/include/libserial)
-# include_directories(${LIBSERIAL_INCLUDE_DIRS})
-# link_directories("${LIBSERIAL_LIBRARY_DIRS}")
+include_directories("/usr/include/libserial")
+link_directories("/usr/include/libserial")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GAZEBO_CXX_FLAGS}")
-add_executable(brain brain.cc gz_robot.cc rg_robot.cc)
+add_executable(brain brain.cc gz_robot.cc rg_robot.cc ranger.cc)
 TARGET_LINK_LIBRARIES(brain ${GTK3_LIBRARIES})
 TARGET_LINK_LIBRARIES(brain ${LIBSERIAL_LIBRARIES})
 target_link_libraries(brain ${GAZEBO_LIBRARIES})

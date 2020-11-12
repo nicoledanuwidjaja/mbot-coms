@@ -1,61 +1,118 @@
+#include <fcntl.h>
+#include <unistd.h>
+#include <termios.h>
+#include <errno.h>
+#include <assert.h>
 #include <stdio.h>
-#include <SerialStream.h>
-using namespace LibSerial;
-
+#include <ctype.h>
+#include <iostream>
+#include <string>
 #include "robot.hh"
 
-static SerialStream port;
+using std::cout;
+using std::endl;
+using std::string;
 
-RgRobot::RgRobot(int argc, char* argv[], void (*cb)(Robot*))
+int port;
+
+RgRobot::RgRobot(int argc, char *argv[], void (*cb)(Robot *))
+    : on_update(cb)
 {
-    port.Open("/dev/ttyUSB0");
-    port.SetBaudRate(SerialStreamBuf::BAUD_9600);
-    port.SetCharSize(SerialStreamBuf::CHAR_SIZE_8);
-    port.SetParity(SerialStreamBuf::PARITY_NONE);
-    port.SetNumOfStopBits(1);
+    int rv;
+    port = open("/dev/ttyUSB0", O_RDWR);
+    assert(port > 0);
+
+    struct termios cfg;
+    rv = tcgetattr(port, &cfg);
+    assert(rv != -1);
+
+    // https://github.com/todbot/arduino-serial/blob/master/arduino-serial-lib.c
+    cfsetispeed(&cfg, B9600);
+    cfsetospeed(&cfg, B9600);
+    cfg.c_cflag &= ~PARENB;
+    cfg.c_cflag &= ~CSTOPB;
+    cfg.c_cflag &= ~CRTSCTS;
+    cfg.c_cflag |= CS8;
+
+    rv = tcsetattr(port, TCSANOW, &cfg);
+    assert(rv != -1);
 }
 
 RgRobot::~RgRobot()
 {
-
 }
 
-float
-RgRobot::get_range()
+float RgRobot::get_range()
 {
     return range;
 }
 
-void
-RgRobot::set_vel(double lvel, double rvel)
+void RgRobot::set_vel(double lvel, double rvel)
 {
+    lvel = clamp(-4, lvel, 4);
+    rvel = clamp(-4, rvel, 4);
+
     char temp[100];
-    snprintf(temp, "%.02f,%.02f\n", lvel, rvel);
-    port.write(temp, strlen(temp));
+    int s0 = (int)round(lvel * 50);
+    int s1 = (int)round(rvel * 50);
+
+    snprintf(temp, 96, "%d %d\n", s0, s1);
+    write(port, temp, strlen(temp));
+    //cout << "cmd: " << temp << endl;
 }
 
-void
-RgRobot::read_range()
+static string
+serial_read_line()
 {
-    char temp[100];
-    int ii = 0;
+    string temp("");
+    char cc = 0;
 
-    for (; ii < 96; ++ii) {
-        port.read(temp + ii, 1);
-        if (temp[ii] == '\n') {
-            break;
+    while (1)
+    {
+        read(port, &cc, 1);
+
+        if (cc == '\n' && temp.size() > 0)
+        {
+            return temp;
+        }
+
+        if (cc == '\n' || temp.size() > 30)
+        {
+            temp.clear();
+        }
+
+        if (isdigit(cc) || cc == ' ')
+        {
+            temp.push_back(cc);
         }
     }
-
-    temp[ii+1] = 0;
-
-    this->range = atof(temp);
 }
 
-void
-RgRobot::do_stuff()
+void RgRobot::read_range()
 {
-    while (1) {
+    string line = serial_read_line();
+    const char *temp = line.c_str();
+
+    cout << "[" << temp << "]" << endl;
+
+    int rg, sL, sR;
+    int rv = sscanf(temp, "%d %d %d", &rg, &sL, &sR);
+    if (rv != 3)
+    {
+        this->range = 0;
+        return;
+    }
+
+    this->range = rg / 100.0f;
+    cout << "range = " << this->range << "; "
+         << "speeds = " << sL << "," << sR << endl;
+}
+
+void RgRobot::do_stuff()
+{
+    while (1)
+    {
+        cout << "\n == iterate ==" << endl;
         this->read_range();
         this->on_update(this);
     }

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <SerialStream.h>
-#include "ranger-library.hh"
+#include "ranger.hh"
 
 using namespace LibSerial;
 using namespace std;

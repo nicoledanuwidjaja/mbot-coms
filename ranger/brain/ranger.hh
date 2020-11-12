@@ -1,5 +1,5 @@
-#ifndef RGLIBRARY_HH
-#define RGLIBRARY_HH
+#ifndef RANGER_HH
+#define RANGER_HH
 
 #include <string>
 

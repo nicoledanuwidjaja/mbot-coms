@@ -11,6 +11,7 @@ class Robot {
     virtual ~Robot() = 0;
     virtual float get_range() = 0;
     virtual void set_vel(double lvel, double rvel) = 0;
+    virtual void read_range() = 0;
     virtual void do_stuff() = 0;
 };
 
@@ -55,6 +56,7 @@ class RgRobot : public Robot {
 
     float get_range();
     void set_vel(double lvel, double rvel);
+    void read_range();
     void do_stuff();
 
     void (*on_update)(Robot*);
