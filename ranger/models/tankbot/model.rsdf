@@ -204,5 +204,19 @@
       <child>ultrasonic_sensor::link</child>
       <parent>chassis</parent>
     </joint>
+
+    <include>
+      <uri>model://microphone_sensor</uri>
+      <pose>
+        0.0 0.0 0.23
+        0.0 0.0 0.0
+      </pose>
+    </include>
+
+    <joint name="microphone_joint" type="fixed">
+      <child>microphone_sensor::link</child>
+      <parent>chassis</parent>
+    </joint>
+    
   </model>
 </sdf>

@@ -112,6 +112,14 @@ GzRobot::on_scan(ConstSonarStampedPtr &msg)
 }
 
 void
+Robot::on_sound(ConstIntPtr &msg)
+{
+
+    this->noise = msg->data();
+    this->on_update(this);
+}
+
+void
 GzRobot::on_pose(ConstPoseStampedPtr &msg)
 {
     auto x_error = ((rand() % 21) - 10) * 0.02;
