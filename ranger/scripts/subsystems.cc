@@ -8,9 +8,11 @@ SubSystems::SubSystems() : motor_left(9), motor_right(10), ultrasonic(3), led(7,
 
 void SubSystems::move(int direction, int speed)
 {
-    // Serial.println("ss:move: direction: "+String(direction)+", speed: "+String(speed));
+    Serial.println("ss:move: direction: "+String(direction)+", speed: "+String(speed));
+
     int leftSpeed = 0;
     int rightSpeed = 0;
+
     switch (direction) {
     case BOT_FORWARD:
         leftSpeed = speed;
@@ -49,6 +51,7 @@ void SubSystems::move(int direction, int speed)
         rightSpeed = 0;
         break;
     }
+    
     motor_left.run((9) == M1 ? -(leftSpeed) : (leftSpeed));
     motor_right.run((10) == M1 ? -(rightSpeed) : (rightSpeed));
 }
