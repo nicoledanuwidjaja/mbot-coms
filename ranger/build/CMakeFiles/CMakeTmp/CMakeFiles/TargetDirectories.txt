@@ -1,3 +1,0 @@
-/home/ubuntu/Homework/project/ranger/build/CMakeFiles/CMakeTmp/CMakeFiles/rebuild_cache.dir
-/home/ubuntu/Homework/project/ranger/build/CMakeFiles/CMakeTmp/CMakeFiles/edit_cache.dir
-/home/ubuntu/Homework/project/ranger/build/CMakeFiles/CMakeTmp/CMakeFiles/cmTC_85bf1.dir

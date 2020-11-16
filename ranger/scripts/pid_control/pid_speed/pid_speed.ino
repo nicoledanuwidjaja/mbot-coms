@@ -125,10 +125,10 @@ void loop()
     Encoder_1.loop();
     Encoder_2.loop();
 
-    /*
+    
   Serial.print("Speed 1:");
   Serial.print(Encoder_1.getCurrentSpeed());
   Serial.print(" , Speed 2:");
   Serial.println(Encoder_2.getCurrentSpeed());
-  */
+ 
 }

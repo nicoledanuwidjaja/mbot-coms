@@ -2,13 +2,13 @@
 #include <Servo.h>
 #include <Wire.h>
 #include <SoftwareSerial.h>
-#include "mCore.h"
+#include "MeAuriga.h"
 
 MeRGBLed rgb;
-MeUltrasonic ultr(PORT_3);
+MeUltrasonicSensor ultr(PORT_3);
 MeLineFollower line(PORT_2);
 MeLEDMatrix ledMx;
-MeIR ir;
+MSTR ir;
 MeBuzzer buzzer;
 MeTemperature ts;
 Me7SegmentDisplay seg;
