@@ -20,11 +20,11 @@ RgRobot::RgRobot(int argc, char *argv[], void (*cb)(Robot *))
 {
     int rv;
     port = open("/dev/ttyUSB0", O_RDWR);
-    assert(port > 0);
-
+    cout << "PORT: " << port << endl;
     struct termios cfg;
     rv = tcgetattr(port, &cfg);
-    assert(rv != -1);
+
+    cout << "DO I FAIL HERE?" << endl;
 
     // https://github.com/todbot/arduino-serial/blob/master/arduino-serial-lib.c
     cfsetispeed(&cfg, B9600);

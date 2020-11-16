@@ -12,6 +12,7 @@ string command;
 
 void create_robot_connection(std::string portAddress)
 {
+    cout << "HELLO, " << portAddress << endl;
     port.Open(portAddress);
     port.SetBaudRate(LibSerial::BaudRate::BAUD_9600);
     port.SetCharacterSize(LibSerial::CharacterSize::CHAR_SIZE_8);
@@ -23,6 +24,7 @@ void set_all_lights(int r, int g, int b)
 {
     command = "light " + to_string(r) + " " + to_string(g) + " " + to_string(b);
     port.write(command.c_str(), command.length());
+    cout << "Command: " << command << endl;
 }
 
 void set_single_light(int index, int r, int g, int b)

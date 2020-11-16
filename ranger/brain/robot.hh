@@ -11,7 +11,6 @@ class Robot {
     virtual ~Robot() = 0;
     virtual float get_range() = 0;
     virtual void set_vel(double lvel, double rvel) = 0;
-    virtual void read_range() = 0;
     virtual void do_stuff() = 0;
 };
 

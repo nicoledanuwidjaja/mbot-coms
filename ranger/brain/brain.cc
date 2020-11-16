@@ -6,19 +6,45 @@
 #include <thread>
 #include <chrono>
 #include "ranger.hh"
+#include "robot.hh"
 
 using namespace LibSerial;
 using namespace std;
 
 const string PORT = "/dev/ttyUSB0";
 
+void callback(Robot* robot) {
+	float speed = 6 * clamp(0.0, robot->get_range() - 0.25, 1.0);
+	cout << "Speed: " << speed << endl;
+	robot->set_vel(speed, speed);
+}
+
 int main(int argc, char *argv[])
 {
+	Robot* robot = 0;
+
+	std::string bname(basename(argv[0]));
+	cout << "bin: [" << bname << "]" << endl;
+
+	if (bname == "gz_brain") {
+		cout << "Gazebo mode" << endl;
+		robot = new GzRobot(argc, argv, callback);
+	}
+
+	if (bname == "rg_brain") {
+		cout << "Ranger mode" << endl;
+		robot = new RgRobot(argc, argv, callback);
+	}
+
+	robot->do_stuff();
+
 	create_robot_connection(PORT);
 
 	while (true) {
+		cout << "Robot begins doing things" << endl;
 		usleep(2);
 		set_all_lights(0, 0, 255);
+		cout << "Do something" << endl;
 		usleep(2);
 		lights_off();
 		usleep(2);

@@ -18,4 +18,4 @@ $(BIN): $(wildcard *.cc) build/Makefile
 	cp build/$(BIN) .
 
 clean:
-	rm -rf build $(BIN) gz_brain rg_brain
+	rm -rf build/$(BIN) gz_brain rg_brain
