@@ -1,7 +1,7 @@
 
-BIN := brain
+BIN := run
 
-all: commands SerialController Subsystems run
+all: run
 
 build/Makefile: Makefile CMakeLists.txt
 	mkdir -p build
@@ -12,4 +12,4 @@ $(BIN): $(wildcard *.cc) build/Makefile
 	cp build/$(BIN) .
 
 clean:
-	rm -rf build $(BIN) commands SerialController Subsystems run
+	rm -rf build $(BIN)

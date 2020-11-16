@@ -1,13 +1,5 @@
 cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
-
-# Find Gtk+3
-# ref: https://gist.github.com/fracek/3323924
-FIND_PACKAGE(PkgConfig REQUIRED)
-
-PKG_CHECK_MODULES(GTK3 REQUIRED gtk+-3.0)
-INCLUDE_DIRECTORIES(${GTK3_INCLUDE_DIRS})
-LINK_DIRECTORIES(${GTK3_LIBRARY_DIRS})
-ADD_DEFINITIONS(${GTK3_CFLAGS_OTHER})
+project(Robot-See-Robot-Do)
 
 # Xlib
 find_package(X11 REQUIRED)
@@ -20,7 +12,7 @@ include_directories("/usr/include/libserial")
 link_directories("/usr/include/libserial")
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GAZEBO_CXX_FLAGS}")
-add_executable(brain commands.cc run.cc SerialController.cc Subsystems.cc)
+add_executable(brain commands.cc run.cc SerialController.cc subsystems.cc)
 TARGET_LINK_LIBRARIES(brain ${GTK3_LIBRARIES})
 TARGET_LINK_LIBRARIES(brain ${LIBSERIAL_LIBRARIES})
 target_link_libraries(brain ${GAZEBO_LIBRARIES})

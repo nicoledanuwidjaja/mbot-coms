@@ -1,6 +1,6 @@
 // https://github.com/sumsted/roboplayground/blob/master/SubSystems.h
-#ifndef SUB_SYSTEM_H
-#define SUB_SYSTEM_H
+#ifndef SUBSYSTEM_H
+#define SUBSYSTEM_H
 
 #include <SoftwareSerial.h>
 #include <MeSerial.h>
