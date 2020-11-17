@@ -2,6 +2,8 @@
 #ifndef SUBSYSTEM_H
 #define SUBSYSTEM_H
 
+#include <MeAuriga.h>
+#include <MakeBlock.h>
 #include <SoftwareSerial.h>
 #include <MeSerial.h>
 #include <MeDCMotor.h>
