@@ -1,3 +1,0 @@
-/home/ubuntu/Homework/project/ranger/plugins/tank_control/build/CMakeFiles/rebuild_cache.dir
-/home/ubuntu/Homework/project/ranger/plugins/tank_control/build/CMakeFiles/edit_cache.dir
-/home/ubuntu/Homework/project/ranger/plugins/tank_control/build/CMakeFiles/tank_control_plugin.dir

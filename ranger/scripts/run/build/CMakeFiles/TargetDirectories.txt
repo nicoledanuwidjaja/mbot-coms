@@ -1,0 +1,3 @@
+/home/ubuntu/Homework/project/ranger/scripts/run/build/CMakeFiles/rebuild_cache.dir
+/home/ubuntu/Homework/project/ranger/scripts/run/build/CMakeFiles/edit_cache.dir
+/home/ubuntu/Homework/project/ranger/scripts/run/build/CMakeFiles/brain.dir

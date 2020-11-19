@@ -1,0 +1,1 @@
+/usr/bin/c++     -rdynamic CMakeFiles/brain.dir/commands.cpp.o CMakeFiles/brain.dir/run.cpp.o CMakeFiles/brain.dir/SerialController.cpp.o CMakeFiles/brain.dir/subsystems.cpp.o  -o brain   -L/usr/include/libserial  -Wl,-rpath,/usr/include/libserial -lSM -lICE -lX11 -lXext -lserial 
