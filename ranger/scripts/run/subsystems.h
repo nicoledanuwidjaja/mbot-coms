@@ -1,7 +1,10 @@
-// https://github.com/sumsted/roboplayground/blob/master/SubSystems.h
+/* 
+ * Defined commands for controlling subsystem interfaces.
+ */
 #ifndef SUBSYSTEM_H
 #define SUBSYSTEM_H
 
+#include <Arduino.h>
 #include <SoftwareSerial.h>
 #include <MeSerial.h>
 #include <MeDCMotor.h>
@@ -50,40 +53,36 @@ class SubSystems
 public:
     SubSystems();
 
-    // ultrasonic
+    // ULTRASONIC
     boolean is_approximate(double a, double b, double e);
     double get_distance();
     boolean scan_to(double distance, double error);
 
-    // gyro and compass
+    // GYROSCOPE
     void get_angles(double (&angles)[3]);
     void get_gyro_data(double (&gyro_data)[2]);
     void get_heading(int16_t (&heading)[3]);
 
-    // motor movement
+    // MOTOR
     void move(int direction, int speed);
     void move_left(int speed);
     void move_right(int speed);
     void move_to(double distance, double error);
-    void open_door();
-    void close_door();
 
-    // colors and sound
+    // COLORS/SOUNDS
     void play_note(int d, int n);
     void show_color(int d, int r, int g, int b);
     void show_color(int d, char color);
     void show_color(char color);
+    
+    // COMMANDS
+    void send_cmd_string(String contents);
+    String get_cmd_string();
 
-    // button
+    // BUTTON
     boolean is_button_pressed();
 
-    // ir
-    void ir_reset();
-    void ir_loop();
-    void send_ir_string(String contents);
-    String get_ir_string();
-    boolean get_remote_button(uint32_t *button);
-
+// hardware components
 private:
     MeDCMotor motor_left;
     MeDCMotor motor_right;

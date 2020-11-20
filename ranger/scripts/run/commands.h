@@ -1,6 +1,7 @@
 #ifndef COMMANDS_H
 #define COMMANDS_H
 
+#include <Arduino.h>
 #include "subsystems.h"
 
 class Commands {

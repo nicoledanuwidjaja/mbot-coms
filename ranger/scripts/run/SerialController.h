@@ -1,7 +1,9 @@
 /*
  * CC-BY-SA 3.0 by Maker Works Tech Co., Ltd, www.makeblock.cc
- * Modified from mbot factory firmware
+ * Provided by mBot Factory firmware.
+ * Interface for connecting with Makeblock Bluetooth app.
  */
+#include <Arduino.h>
 #include "subsystems.h"
 
 #define GET 1

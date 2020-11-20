@@ -1,10 +1,15 @@
-// https://github.com/sumsted/roboplayground/blob/master/SubSystems.cpp
 
+/*
+ * mBot device interfaces for subsystems.
+ * Supports motion and infrared, color, and gyroscope sensors.
+ * https://github.com/sumsted/roboplayground/blob/master/SubSystems.cpp
+ */
+#include <Arduino.h>
 #include "subsystems.h"
 
 SubSystems::SubSystems() : motor_left(9), motor_right(10), ultrasonic(3), led(7, 7 == 7 ? 2 : 4)
 {
-    ir_reset();
+    
 }
 
 void SubSystems::move(int direction, int speed)
@@ -67,25 +72,6 @@ void SubSystems::move_right(int speed)
     motor_right.run((10) == M1 ? -(speed) : (speed));
 }
 
-void SubSystems::open_door()
-{
-    motor_left.run(100);
-    delay(2000);
-    motor_left.run(0);
-}
-
-void SubSystems::close_door()
-{
-    motor_left.run(-100);
-    delay(2000);
-    motor_left.run(0);
-}
-
-void SubSystems::ir_loop()
-{
-    ir.loop();
-}
-
 boolean SubSystems::is_approximate(double a, double b, double e)
 {
     return (abs(a - b) < e);
@@ -93,14 +79,14 @@ boolean SubSystems::is_approximate(double a, double b, double e)
 
 void SubSystems::play_note(int d, int n)
 {
-    // Serial.println("ss: play_note: duration: "+String(d)+", tone: "+String(n));
+    Serial.println("ss: play_note: duration: "+String(d)+", tone: "+String(n));
     buzzer.tone(n, d);
     buzzer.noTone();
 }
 
 void SubSystems::show_color(int d, int r, int g, int b)
 {
-    // Serial.println("ss: show_color: d: "+String(d)+", r,g,b: "+String(r)+", "+String(g)+", "+String(b));
+    Serial.println("ss: show_color: d: "+String(d)+", r,g,b: "+String(r)+", "+String(g)+", "+String(b));
     led.setColor(0, r, g, b);
     led.show();
     delay(d);
@@ -108,26 +94,27 @@ void SubSystems::show_color(int d, int r, int g, int b)
 
 void SubSystems::show_color(int d, char color)
 {
-    // Serial.println("ss: show_color: d: "+String(d)+", color: "+String(color));
+    Serial.println("ss: show_color: d: "+String(d)+", color: "+String(color));
     switch (color)
     {
-    case RED:
-        led.setColor(0, 255, 0, 0);
-        break;
-    case GREEN:
-        led.setColor(0, 0, 255, 0);
-        break;
-    case BLUE:
-        led.setColor(0, 0, 0, 255);
-        break;
-    case WHITE:
-        led.setColor(0, 255, 255, 255);
-        break;
-    case BLACK:
-    default:
-        led.setColor(0, 0, 0, 0);
-        break;
+        case RED:
+            led.setColor(0, 255, 0, 0);
+            break;
+        case GREEN:
+            led.setColor(0, 0, 255, 0);
+            break;
+        case BLUE:
+            led.setColor(0, 0, 0, 255);
+            break;
+        case WHITE:
+            led.setColor(0, 255, 255, 255);
+            break;
+        case BLACK:
+        default:
+            led.setColor(0, 0, 0, 0);
+            break;
     }
+
     led.show();
     delay(d);
 }
@@ -138,55 +125,28 @@ void SubSystems::show_color(char color)
     show_color(0, color);
 }
 
-void SubSystems::ir_reset()
+// TODO: UPDATE COMMAND STRING METHODS
+void SubSystems::send_cmd_string(String contents)
 {
-    // Serial.println("ss:ir_reset\n");
-    ir.end();
-    ir.begin();
-}
-
-boolean SubSystems::get_remote_button(uint32_t *button)
-{
-    // Serial.println("ss:get_remote_button\n");
-    if (ir.decode())
-    {
-        *button = ir.value >> 16 & 0xff;
-        return true;
-    }
-    else
-    {
-        *button = 0;
-        return false;
-    }
-}
-
-boolean SubSystems::is_button_pressed()
-{
-    // Serial.println("ss:is_button_pressed\n");
-    return (analogRead(7) > 100);
-}
-
-void SubSystems::send_ir_string(String contents)
-{
-    // Serial.println("ss:send_ir_string:"+contents);
+    Serial.println("ss:send_cmd_string:"+contents);
     ir.sendString("   " + contents);
 }
 
-String SubSystems::get_ir_string()
+String SubSystems::get_cmd_string()
 {
-    // Serial.println("ss:get_ir_string\n");
+    Serial.println("ss:get_cmd_string\n");
     return ir.getString();
 }
 
 double SubSystems::get_distance()
 {
-    // Serial.println("ss:get_distance\n");
+    Serial.println("ss:get_distance\n");
     return ultrasonic.distanceCm();
 }
 
 boolean SubSystems::scan_to(double distance, double error)
 {
-    // Serial.println("ss:scan_to: "+String(distance));
+    Serial.println("ss:scan_to: "+String(distance));
     int i;
     double actual;
     boolean is_found = false;

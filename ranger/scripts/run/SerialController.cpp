@@ -1,3 +1,8 @@
+/* 
+ * Handlers for reading and writing data via Makeblock Bluetooth app.
+ */
+
+#include <Arduino.h>
 #include "SerialController.h"
 
 SerialController::SerialController(SubSystems &ssr)
@@ -14,9 +19,12 @@ SerialController::SerialController(SubSystems &ssr)
 void SerialController::serial_handler()
 {
     read_serial();
+
     if (is_available)
     {
         unsigned char c = serial_read & 0xff;
+
+        Serial.println("Data: " + String(c));
         if (c == 0x55 && is_start == false)
         {
             if (prevc == 0xff)
@@ -41,14 +49,17 @@ void SerialController::serial_handler()
                 write_buffer(index, c);
             }
         }
+
         index++;
         if (index > 51)
         {
             index = 0;
             is_start = false;
         }
+        
         if (is_start && data_len == 0 && index > 3)
         {
+            Serial.println("I got this far!");
             is_start = false;
             route_command();
             index = 0;
@@ -56,9 +67,12 @@ void SerialController::serial_handler()
     }
 }
 
+/* Reads data from serial port. */
 void SerialController::read_serial()
 {
     is_available = false;
+
+    // read data if serial port has data stored in buffer
     if (Serial.available() > 0)
     {
         is_available = true;
@@ -70,9 +84,13 @@ void SerialController::route_command()
 {
     is_start = false;
     int idx = read_buffer(3);
+
+    Serial.println("Index: " + String(idx));
     command_index = (uint8_t)idx;
     int action = read_buffer(4);
     int device = read_buffer(5);
+
+    Serial.println("Device: " + String(device));
     switch (action)
     {
         case GET:
@@ -94,13 +112,11 @@ void SerialController::route_command()
         break;
         case RESET:
         {
-            //reset
             call_ok();
         }
         break;
         case START:
         {
-            //start
             call_ok();
         }
         break;
@@ -136,6 +152,7 @@ void SerialController::run_module(int device)
     //0xff 0x55 0x6 0x0 0x2 0x22 0x9 0x0 0x0 0xa
     int port = read_buffer(6);
     int pin = port;
+    Serial.println("Device: " + String(device));
     switch (device)
     {
         case MOTOR:
@@ -156,6 +173,8 @@ void SerialController::run_module(int device)
     }
 }
 
+
+/* HELPERS FOR WRITING/READING BUFFER */
 void SerialController::call_ok()
 {
     write_serial(0xff);

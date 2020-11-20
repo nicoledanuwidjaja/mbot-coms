@@ -1,14 +1,17 @@
 /* 
 * Instantiates subsystems, commands, and serial controller.
+* Handles command controls for robot.
 * https://github.com/sumsted/roboplayground/blob/master/roboplayground.cpp
 */
 
+#include <Arduino.h>
 #include <MeAuriga.h>
 #include "subsystems.h"
 #include "commands.h"
 #include "SerialController.h"
 
 boolean is_master = false;
+boolean last_is_master = false;
 boolean previous_button_state = false;
 boolean current_button_state = false;
 String last_command = String("");
@@ -20,10 +23,13 @@ SerialController sc(ss);
 void button_handler()
 {
     // Toggle master slave setting if on board button pressed
-    current_button_state = ss.is_button_pressed();
-    if (current_button_state != previous_button_state)
-    {
-        previous_button_state = current_button_state;
+    // current_button_state = ss.is_button_pressed();
+    // Serial.println("Button: " + current_button_state);   
+
+    // if (current_button_state != previous_button_state)
+    // {
+        // previous_button_state = current_button_state;
+        current_button_state = true;
         if (current_button_state == true)
         {
             is_master = is_master ? false : true;
@@ -36,65 +42,73 @@ void button_handler()
                 ss.show_color(BLUE);
             }
         }
-    }
+    // }
 }
 
+// TODO: Update commands to reflect serial commands in english.
 void ir_remote_handler()
 {
     // Listen for command, remote for master and bot 2 bot for slave
     uint32_t value = 0;
-    if (ss.get_remote_button(&value))
+    // if (ss.get_remote_button(&value))
+    if (current_button_state == true)
     {
+
+        Serial.println("Value: " + String(value));
         switch (value)
         {
-        case IR_BUTTON_1:
+        
+        // Transmit commands
+        case "A":
             cmd.master_command(String("A"));
             cmd.command_a(is_master);
             break;
-        case IR_BUTTON_2:
+        case "B":
             cmd.master_command(String("B"));
             cmd.command_b(is_master);
             break;
-        case IR_BUTTON_3:
+        case "C":
             cmd.master_command(String("C"));
             cmd.command_c();
             break;
 
-        case IR_BUTTON_UP:
+        // Movement commands
+        case "UP":
             ss.move(BOT_FORWARD, FAST);
             break;
-        case IR_BUTTON_LEFT:
-            ss.move(BOT_ROTATE_LEFT, FAST);
-            break;
-        case IR_BUTTON_DOWN:
+        case "DOWN":
             ss.move(BOT_BACKWARD, FAST);
             break;
-        case IR_BUTTON_RIGHT:
-            ss.move(BOT_ROTATE_RIGHT, FAST);
-            break;
-        case IR_BUTTON_D:
+        case "LEFT":
             ss.move(BOT_FORWARD_LEFT, FAST);
             break;
-        case IR_BUTTON_E:
+        case "RIGHT":
             ss.move(BOT_FORWARD_RIGHT, FAST);
             break;
-        case IR_BUTTON_0:
+        case "ROTATE LEFT":
+            ss.move(BOT_ROTATE_LEFT, FAST);
+            break;
+        case "ROTATE RIGHT":
+            ss.move(BOT_ROTATE_RIGHT, FAST);
+            break;
+        case "BACK LEFT":
             ss.move(BOT_BACKWARD_LEFT, FAST);
             break;
-        case IR_BUTTON_F:
+        case "BACK RIGHT":
             ss.move(BOT_BACKWARD_RIGHT, FAST);
             break;
-        case IR_BUTTON_SETTING:
+        case "STOP":
             ss.move(BOT_STOP, STOP);
             break;
         }
     }
 }
 
-void ir_command_handler()
+/* Remote control commands sent from master robot to slave robot. */
+void command_handler()
 {
     // The slave bot (blue) listens for IR commands from master
-    String command = ss.get_ir_string();
+    String command = ss.get_cmd_string();
     if (command != "" && command != last_command)
     {
         // Serial.println("command: "+command);
@@ -126,24 +140,23 @@ void setup()
     ss.show_color(BLUE);
 }
 
-boolean last_is_master = false;
 void loop()
 {
     button_handler();
     if (last_is_master != is_master)
     {
-        ss.ir_reset();
         last_is_master = is_master;
         Serial.println("master: " + String(is_master));
     }
+
     if (is_master)
     {
         sc.serial_handler();
-        ir_remote_handler();
+        // ir_remote_handler();
     }
     else
     {
-        ir_command_handler();
+        command_handler();
     }
-    ss.ir_loop();
+
 }
