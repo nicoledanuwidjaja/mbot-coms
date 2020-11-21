@@ -7,83 +7,110 @@ using namespace std;
 
 const string PORT = "/dev/ttyUSB0";
 
-int
-main(int argc, char* argv[])
+#include <stdio.h>
+#include <unistd.h>
+#include <iostream>
+#include "ranger.hh"
+
+using namespace std;
+
+void line_following(double lineReading, int turnDir, double lineReadings[1000], int i)
 {
-	create_robot_connection(PORT);
+	int moveSpeed = 150;
+	lineReadings[i] = lineReading;
+
+	if (turnDir == 0)
+	{
+		if (lineReading == 0)
+		{
+			tank_drive(moveSpeed, moveSpeed);
+		}
+		else if (lineReading == 1)
+		{
+			// turn right
+			turnDir = 1;
+			// tank_drive(moveSpeed, 0);
+		}
+		else if (lineReading == 2)
+		{
+			// turn left
+			turnDir = 2;
+			// tank_drive(0, moveSpeed);
+		}
+		else
+		{
+			if (i > 5)
+			{
+				if (lineReadings[i - 1] == 1 || lineReadings[i - 2] == 1 || lineReadings[i - 3] == 1 || lineReadings[i - 4] == 1 || lineReadings[i - 5] == 1)
+				{
+					// tank_drive(moveSpeed, 0);
+					turnDir = 1;
+				}
+				else if (lineReadings[i - 1] == 2 || lineReadings[i - 2] == 2 || lineReadings[i - 3] == 2 || lineReadings[i - 4] == 2 || lineReadings[i - 5] == 2)
+				{
+					// tank_drive(0, moveSpeed);
+					turnDir = 2;
+				}
+				else
+				{
+					stop();
+				}
+			}
+			else
+			{
+				stop();
+			}
+		}
+	}
+	else if (turnDir == 1)
+	{
+		tank_drive(moveSpeed, 0);
+		if (lineReading == 0)
+		{
+			turnDir = 0;
+		}
+	}
+	else if (turnDir == 2)
+	{
+		tank_drive(0, moveSpeed);
+		if (lineReading == 0)
+		{
+			turnDir = 0;
+		}
+	}
+}
+
+int main(int argc, char *argv[])
+{
+	// int status =  viz_run(argc, argv);
+	// cout << status << endl;
+	create_robot_connection("/dev/ttyUSB0");
 	sleep(2);
-	set_all_lights(0, 0, 255);
-	sleep(2);
-	lights_off();
-	sleep(2);
-	set_single_light(1, 0, 255, 0);
-	sleep(2);
-	single_light_off(1);
-	sleep(2);
-	move_forward();
-	sleep(2);
-	stop();
-	sleep(2);
-	move_backward();
-	sleep(2);
-	stop();
-	sleep(2);
-	turn_left();
-	sleep(2);
-	stop();
-	sleep(2);
-	turn_right();
-	sleep(2);
-	stop();
-	sleep(2);
-	move_forward(250);
-	sleep(2);
-	stop();
-	sleep(2);
-	move_backward(250);
-	sleep(2);
-	stop();
-	sleep(2);
-	turn_left(250);
-	sleep(2);
-	stop();
-	sleep(2);
-	turn_right(250);
-	sleep(2);
-	stop();
-	sleep(2);
-	tank_drive(200, -200);
-	sleep(2);
-	stop();
-	sleep(2);
-	tank_drive(-200, 200);
-	sleep(2);
-	stop();
-	sleep(2);
-	tank_drive(200, 200);
-	sleep(2);
-	stop();
-	sleep(2);
-	tank_drive(-200, -170);
-	sleep(2);
-	stop();
-	sleep(2);
-	make_noise(1000, 100);
-	sleep(2);
-	cout << "line sensor: " << read_line_sensor() << endl;
-	sleep(2);
-	cout << "light sensor: " << read_light_sensor() << endl;
-	sleep(2);
-	cout << "temperature: " << read_temperature_sensor() << endl;
-	sleep(2);
-	cout << "sound sensor: " << read_sound_sensor() << endl;
-	sleep(2);
-	cout << "sonar sensor: " << read_sonar_sensor() << endl;
-	sleep(2);
-	cout << "Gyro X: " << read_gyroscope_x() << endl;
-	sleep(2);
-	cout << "Gyro Y: " << read_gyroscope_y() << endl;
-	sleep(2);
-	cout << "Gyro Z: " << read_gyroscope_z() << endl;
-	sleep(2);
+
+	double lineReadings[1000];
+	lineReadings[0] = 0;
+	lineReadings[1] = 0;
+	lineReadings[2] = 0;
+	lineReadings[3] = 0;
+	lineReadings[4] = 0;
+
+	int i = 5;
+	// 0 = forward, 1 = right, 2 = left
+	int turnDir = 0;
+	while (true)
+	{
+		std::array<double, 5> sensorReadings = read_all();
+		double lineReading = sensorReadings[0];
+		cout << "Line Sensor: " + to_string(lineReading) << endl;
+		line_following(lineReading, turnDir, lineReadings, i);
+		if (i >= 980)
+		{
+			i = 5;
+		}
+		else
+		{
+			i += 1;
+		}
+		sleep(0.05);
+	}
 }
