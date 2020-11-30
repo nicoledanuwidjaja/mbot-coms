@@ -1,9 +1,7 @@
-// Arduino Serial Example #4 Remote Control Blink Using Software Serial - Slave
-
+/* Test slave state with SoftwareSerial. */
 #include <SoftwareSerial.h> 
 SoftwareSerial SoftSerial(11, 12); // RX, TX
- 
- 
+
 char c  = ' ';
 byte LED1 = 2;
 byte LED2 = 3;

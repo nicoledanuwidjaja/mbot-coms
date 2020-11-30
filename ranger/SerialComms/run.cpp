@@ -45,7 +45,6 @@ void button_handler()
     // }
 }
 
-// TODO: Update commands to reflect serial commands in english.
 void ir_remote_handler()
 {
     // Listen for command, remote for master and bot 2 bot for slave

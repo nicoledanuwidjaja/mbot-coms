@@ -1,6 +1,4 @@
-// Arduino Serial Example #4 Remote Control Blink Using Software Serial - Master
- 
- 
+/* Test master state with SoftwareSerial. */
 #include <SoftwareSerial.h> 
 SoftwareSerial SoftSerial(2, 3); // RX, TX
  
